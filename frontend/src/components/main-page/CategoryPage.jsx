@@ -6,13 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import ProductCard from "../main-page/product-card/ProductCard";
 
 const fetchProducts = async () => {
-  const res = await fetch("http://localhost:3000/api/products");
+  const res = await fetch("/api/categories");
   if (!res.ok) throw new Error("Ошибка загрузки товаров");
   return res.json();
 };
 
 const fetchCategories = async () => {
-  const res = await fetch("http://localhost:3000/api/categories");
+  const res = await fetch("/api/categories");
   if (!res.ok) throw new Error("Ошибка загрузки категорий");
   return res.json();
 };
