@@ -1,0 +1,5 @@
+# Все текстовые файлы нормализуются
+* text=auto
+
+# Игнорировать node_modules
+node_modules/** -text

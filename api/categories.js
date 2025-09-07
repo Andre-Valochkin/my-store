@@ -1,11 +1,8 @@
-import { fetchAndParseXML } from "../utils/xmlParser";
+import { fetchAndParseXML } from "./fetchXML.js";
 
-const XML_URL = "https://i-maxi.com/ocext_yml_feed.xml";
-
-export default async function handler(req, res) {
+export default async function getCategories(req, res) {
 	try {
-		const result = await fetchAndParseXML(XML_URL);
-
+		const result = await fetchAndParseXML();
 		const categoriesXml = result?.yml_catalog?.shop?.[0]?.categories?.[0]?.category || [];
 		const categoriesMap = {};
 		const rootCategories = [];
@@ -28,8 +25,10 @@ export default async function handler(req, res) {
 			}
 		});
 
-		res.status(200).json({ categories: rootCategories });
-	} catch (error) {
-		res.status(500).json({ error: error.message });
+		if (res) res.json({ categories: rootCategories });
+		return rootCategories; // для локального использования
+	} catch (err) {
+		if (res) res.status(500).json({ error: err.message });
+		else throw err;
 	}
 }

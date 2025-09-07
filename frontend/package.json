@@ -19,5 +19,6 @@
     "@vitejs/plugin-react": "^4.0.0",
     "concurrently": "^9.2.1",
     "vite": "^5.0.0"
-  }
+  },
+  "type": "module"
 }

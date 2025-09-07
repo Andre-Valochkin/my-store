@@ -1,22 +1,20 @@
-import { fetchAndParseXML } from "../utils/xmlParser.js";
+import { fetchAndParseXML } from "./fetchXML.js";
 
-const XML_URL = "https://i-maxi.com/ocext_yml_feed.xml";
-
-export default async function handler(req, res) {
+export default async function getProducts(req, res) {
 	try {
-		const result = await fetchAndParseXML(XML_URL);
+		const result = await fetchAndParseXML();
+		const products = result?.yml_catalog?.shop?.[0]?.offers?.[0]?.offer?.map((item) => ({
+			id: item.$.id,
+			name: item.name?.[0] || "",
+			price: item.price?.[0] || "",
+			images: item.picture || [],
+			categoryId: item.categoryId?.[0] || null,
+		})) || [];
 
-		const products =
-			result?.yml_catalog?.shop?.[0]?.offers?.[0]?.offer?.map((item) => ({
-				id: item.$.id,
-				name: item.name?.[0] || "",
-				price: item.price?.[0] || "",
-				images: item.picture || [],
-				categoryId: item.categoryId?.[0] || null,
-			})) || [];
-
-		res.status(200).json(products);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
+		if (res) res.json(products);
+		return products; // для локального использования
+	} catch (err) {
+		if (res) res.status(500).json({ error: err.message });
+		else throw err;
 	}
 }
