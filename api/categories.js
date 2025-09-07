@@ -1,34 +1,19 @@
-import { fetchAndParseXML } from "./fetchXML.js";
+import axios from "axios";
+import xml2js from "xml2js";
 
-export default async function getCategories(req, res) {
+export default async function handler(req, res) {
 	try {
-		const result = await fetchAndParseXML();
-		const categoriesXml = result?.yml_catalog?.shop?.[0]?.categories?.[0]?.category || [];
-		const categoriesMap = {};
-		const rootCategories = [];
+		const { data } = await axios.get("https://i-maxi.com/ocext_yml_feed.xml");
+		const result = await xml2js.parseStringPromise(data);
 
-		categoriesXml.forEach((cat) => {
-			const id = cat.$.id;
-			const parentId = cat.$.parentId || null;
-			const name = (cat._ || "").trim();
-			const categoryObj = { id, name, subcategories: [] };
-			categoriesMap[id] = categoryObj;
+		const categories = result.yml_catalog.shop[0].categories[0].category.map(c => ({
+			id: c.$.id,
+			name: c._,
+		}));
 
-			if (parentId) {
-				if (categoriesMap[parentId]) {
-					categoriesMap[parentId].subcategories.push(categoryObj);
-				} else {
-					categoriesMap[parentId] = { id: parentId, name: "", subcategories: [categoryObj] };
-				}
-			} else {
-				rootCategories.push(categoryObj);
-			}
-		});
-
-		if (res) res.json({ categories: rootCategories });
-		return rootCategories; // для локального использования
+		res.setHeader("Content-Type", "application/json");
+		res.status(200).json(categories);
 	} catch (err) {
-		if (res) res.status(500).json({ error: err.message });
-		else throw err;
+		res.status(500).json({ error: "Ошибка загрузки категорий" });
 	}
 }

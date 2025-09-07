@@ -1,20 +1,21 @@
-import { fetchAndParseXML } from "./fetchXML.js";
+import axios from "axios";
+import xml2js from "xml2js";
 
-export default async function getProducts(req, res) {
+export default async function handler(req, res) {
 	try {
-		const result = await fetchAndParseXML();
-		const products = result?.yml_catalog?.shop?.[0]?.offers?.[0]?.offer?.map((item) => ({
-			id: item.$.id,
-			name: item.name?.[0] || "",
-			price: item.price?.[0] || "",
-			images: item.picture || [],
-			categoryId: item.categoryId?.[0] || null,
-		})) || [];
+		const { data } = await axios.get("https://i-maxi.com/ocext_yml_feed.xml");
+		const result = await xml2js.parseStringPromise(data);
 
-		if (res) res.json(products);
-		return products; // для локального использования
+		const products = result.yml_catalog.shop[0].offers[0].offer.map(p => ({
+			id: p.$.id,
+			name: p.name[0],
+			price: p.price[0],
+			categoryId: p.categoryId[0],
+		}));
+
+		res.setHeader("Content-Type", "application/json");
+		res.status(200).json(products);
 	} catch (err) {
-		if (res) res.status(500).json({ error: err.message });
-		else throw err;
+		res.status(500).json({ error: "Ошибка загрузки товаров" });
 	}
 }
