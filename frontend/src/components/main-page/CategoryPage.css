@@ -1,0 +1,51 @@
+.categoryPage-title-block {
+	position: relative;
+	width: 100%;
+	position: fixed;
+	background-color: #fff;
+}
+
+.categoryPage-title-block::before {
+	content: "";
+	width: 90%;
+	height: 4px;
+	background-color: rgba(0, 0, 0, 0.719);
+	position: absolute;
+	border-radius: 90%;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.categoryPage-title-block h1 {
+	font-family: "Montserrat", sans-serif;
+	font-weight: 400;
+	font-size: 12px;
+}
+
+.categoryPage-products-block {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px;
+	justify-content: flex-start;
+	padding-top: 50px;
+}
+
+.categoryPage-show-more-btn {
+	display: block;
+	margin: 20px auto;
+	padding: 10px 20px;
+	background: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.categoryPage-show-more-btn:hover {
+	background: #0056b3;
+}
+
+.error {
+	color: red;
+}

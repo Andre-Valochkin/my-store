@@ -1,0 +1,25 @@
+.bread-crumbs {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	background: transparent;
+}
+
+@media (max-width: 768px) {
+	.bread-crumbs {
+		top: 45px;
+
+	}
+}
+
+.bread-crumbs__wrapper {
+	width: 100%;
+	max-width: 1200px;
+	/* ограничиваем по ширине */
+	height: 30px;
+	background-color: rgba(20, 20, 20, 0.171);
+	border: 1px solid #00000049;
+	border-radius: 10px;
+	padding: 0 10px;
+	box-sizing: border-box;
+}
