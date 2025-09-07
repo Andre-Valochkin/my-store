@@ -1,4 +1,4 @@
-import { fetchAndParseXML } from "../../utils/xmlParser.js";
+import { fetchAndParseXML } from "../utils/xmlParser.js";
 
 const XML_URL = "https://i-maxi.com/ocext_yml_feed.xml";
 
