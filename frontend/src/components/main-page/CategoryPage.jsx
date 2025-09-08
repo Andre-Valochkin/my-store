@@ -1,18 +1,20 @@
 import "./CategoryPage.css";
 
+import { API_BASE } from "../../config";
+
 import { useParams } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "../main-page/product-card/ProductCard";
 
 const fetchProducts = async () => {
-  const res = await fetch("/api/products");
+  const res = await fetch(`${API_BASE}/products`);
   if (!res.ok) throw new Error("Ошибка загрузки товаров");
   return res.json();
 };
 
 const fetchCategories = async () => {
-  const res = await fetch("/api/categories");
+  const res = await fetch(`${API_BASE}/categories`);
   if (!res.ok) throw new Error("Ошибка загрузки категорий");
   return res.json();
 };

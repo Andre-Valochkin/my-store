@@ -1,3 +1,5 @@
+import { API_BASE } from "../../../config";
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./CategoriesSidebar.css";
@@ -9,7 +11,7 @@ const CategoriesSidebar = ({ onSelectCategory }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    fetch("/api/categories")
+    fetch(`${API_BASE}/categories`)
       .then((res) => res.json())
       .then((data) => {
         setCategories(data.categories || []);
