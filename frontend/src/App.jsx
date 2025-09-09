@@ -9,6 +9,7 @@ const App = () => {
     <>
       <Header />
       <div className="container">
+        <h1>YAhoooooooooooo....................</h1>
         <Routes>
           {/* Главная = все товары */}
           <Route path="/" element={<CategoryPage categoryId="all" />} />
