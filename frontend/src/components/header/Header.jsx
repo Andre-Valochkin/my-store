@@ -12,7 +12,7 @@ const Header = () => {
           <div className="header-logo">
             <img
               className="header-logo__img"
-              src="../../../public/potribna-rich-logo.png"
+              src="/potribna-rich-logo.png"
               alt="Logo"
             />
           </div>
