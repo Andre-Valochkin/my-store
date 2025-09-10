@@ -1,29 +1,24 @@
 import express from "express";
-import { fetchAndParseXML } from "../utils/xmlParser.js";
+import pool from "../db.js";
 
 const router = express.Router();
-const XML_URL = "https://i-maxi.com/ocext_yml_feed.xml";
 
 router.get("/", async (req, res) => {
 	try {
-		const result = await fetchAndParseXML(XML_URL);
+		const { rows } = await pool.query("SELECT id, name, parent_id FROM categories");
 
-		const categoriesXml = result?.yml_catalog?.shop?.[0]?.categories?.[0]?.category || [];
 		const categoriesMap = {};
 		const rootCategories = [];
 
-		categoriesXml.forEach((cat) => {
-			const id = cat.$.id;
-			const parentId = cat.$.parentId || null;
-			const name = (cat._ || "").trim();
-			const categoryObj = { id, name, subcategories: [] };
-			categoriesMap[id] = categoryObj;
+		rows.forEach((cat) => {
+			const categoryObj = { id: cat.id, name: cat.name, subcategories: [] };
+			categoriesMap[cat.id] = categoryObj;
 
-			if (parentId) {
-				if (categoriesMap[parentId]) {
-					categoriesMap[parentId].subcategories.push(categoryObj);
+			if (cat.parent_id) {
+				if (categoriesMap[cat.parent_id]) {
+					categoriesMap[cat.parent_id].subcategories.push(categoryObj);
 				} else {
-					categoriesMap[parentId] = { id: parentId, name: "", subcategories: [categoryObj] };
+					categoriesMap[cat.parent_id] = { id: cat.parent_id, name: "", subcategories: [categoryObj] };
 				}
 			} else {
 				rootCategories.push(categoryObj);
